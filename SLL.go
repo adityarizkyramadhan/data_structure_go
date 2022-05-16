@@ -2,25 +2,25 @@ package data_structure_go
 
 import "fmt"
 
-type NodeSLL struct {
+type nodeSLL struct {
 	Data int
-	Next *NodeSLL
+	Next *nodeSLL
 }
 
-type NodeSLLList struct {
-	Head   *NodeSLL
+type SLLList struct {
+	Head   *nodeSLL
 	length int
 }
 
-func (n *NodeSLLList) AddDataLast(data int) {
-	nextNodeSLL := NodeSLL{Data: data}
+func (n *SLLList) AddDataLast(data int) {
+	nextNode := nodeSLL{Data: data}
 	if n.Head == nil {
-		n.Head = &nextNodeSLL
+		n.Head = &nextNode
 	}
 	currentNodeSLL := n.Head
 	for currentNodeSLL != nil {
 		if currentNodeSLL.Next == nil {
-			currentNodeSLL.Next = &nextNodeSLL
+			currentNodeSLL.Next = &nextNode
 			n.length++
 			break
 		}
@@ -28,8 +28,8 @@ func (n *NodeSLLList) AddDataLast(data int) {
 	}
 }
 
-func (n *NodeSLLList) AddDataFirst(data int) {
-	newNodeSLL := NodeSLL{Data: data}
+func (n *SLLList) AddDataFirst(data int) {
+	newNodeSLL := nodeSLL{Data: data}
 	if n.Head != nil {
 		newNodeSLL.Next = n.Head
 		n.Head = &newNodeSLL
@@ -40,12 +40,12 @@ func (n *NodeSLLList) AddDataFirst(data int) {
 	}
 }
 
-func (n *NodeSLLList) InsertDataAfter(data int, NodeSLLBefore NodeSLL) {
+func (n *SLLList) InsertDataAfter(data int, NodeSLLBefore nodeSLL) {
 	if n.Head == nil {
 		fmt.Println("Error, Null LinkedList")
 	}
 	//Masukkan NodeSLL yg baru
-	newNodeSLL := NodeSLL{Data: data}
+	newNodeSLL := nodeSLL{Data: data}
 	//Bikin LinkedList
 	currentNodeSLL := n.Head
 	//Loop sampai nil
@@ -65,12 +65,12 @@ func (n *NodeSLLList) InsertDataAfter(data int, NodeSLLBefore NodeSLL) {
 	}
 }
 
-func (n *NodeSLLList) InsertDataBefore(data int, NodeSLLAfter NodeSLL) {
+func (n *SLLList) InsertDataBefore(data int, NodeSLLAfter nodeSLL) {
 	if n.Head == nil {
 		fmt.Println("Error, Null LinkedList")
 	}
 	//Masukkan NodeSLL yg baru
-	newNodeSLL := NodeSLL{Data: data}
+	newNodeSLL := nodeSLL{Data: data}
 	//Masukkan si kepala linkedlist
 	currentNodeSLL := n.Head
 	//loop smpe nil
@@ -91,7 +91,7 @@ func (n *NodeSLLList) InsertDataBefore(data int, NodeSLLAfter NodeSLL) {
 
 }
 
-func (n *NodeSLLList) Print() {
+func (n *SLLList) Print() {
 	if n.Head == nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (n *NodeSLLList) Print() {
 
 }
 
-func (n *NodeSLLList) RemoveDataByValue(data int) {
+func (n *SLLList) RemoveDataByValue(data int) {
 	if n.Head == nil {
 		fmt.Println("List kosong")
 		return
@@ -125,14 +125,14 @@ func (n *NodeSLLList) RemoveDataByValue(data int) {
 	n.length--
 }
 
-func (n *NodeSLLList) Len() int {
+func (n *SLLList) Len() int {
 	return n.length
 }
 
-func (n *NodeSLLList) Initialize() {
+func (n *SLLList) Initialize() {
 	n.Head = nil
 }
 
-func (n *NodeSLLList) IsEmpty() bool {
+func (n *SLLList) IsEmpty() bool {
 	return n.Head == nil
 }
