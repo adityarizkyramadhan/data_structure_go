@@ -16,15 +16,17 @@ func (n *SLLList) AddDataLast(data int) {
 	nextNode := nodeSLL{Data: data}
 	if n.Head == nil {
 		n.Head = &nextNode
+		return
 	}
 	currentNodeSLL := n.Head
 	for currentNodeSLL != nil {
+		currentNodeSLL = currentNodeSLL.Next
+		//add data to last
 		if currentNodeSLL.Next == nil {
 			currentNodeSLL.Next = &nextNode
 			n.length++
 			break
 		}
-		currentNodeSLL = currentNodeSLL.Next
 	}
 }
 
@@ -35,6 +37,8 @@ func (n *SLLList) AddDataFirst(data int) {
 		n.Head = &newNodeSLL
 		n.length++
 	} else {
+		temp := n.Head
+		n.Head.Next = temp
 		n.Head = &newNodeSLL
 		n.length++
 	}
@@ -97,7 +101,7 @@ func (n *SLLList) Print() {
 	}
 	currentNodeSLL := n.Head
 	for currentNodeSLL != nil {
-		fmt.Print(currentNodeSLL.Data, "->")
+		fmt.Println(currentNodeSLL.Data)
 		currentNodeSLL = currentNodeSLL.Next
 	}
 	fmt.Println()
