@@ -3,16 +3,20 @@ package data_structure_go
 import "fmt"
 
 type nodeSLL struct {
-	Data int
+	Data interface{}
 	Next *nodeSLL
 }
 
-type SLLList struct {
+type sLList struct {
 	Head   *nodeSLL
 	length int
 }
 
-func (n *SLLList) AddDataLast(data int) {
+func NewSingleLinkedList() *sLList {
+	return &sLList{}
+}
+
+func (n *sLList) AddDataLast(data interface{}) {
 	nextNode := nodeSLL{Data: data}
 	if n.Head == nil {
 		n.Head = &nextNode
@@ -30,113 +34,123 @@ func (n *SLLList) AddDataLast(data int) {
 	}
 }
 
-func (n *SLLList) AddDataFirst(data int) {
-	newNodeSLL := nodeSLL{Data: data}
+func (n *sLList) AddDataFirst(data interface{}) {
+	newNodeSLL := &nodeSLL{Data: data}
 	if n.Head != nil {
 		newNodeSLL.Next = n.Head
-		n.Head = &newNodeSLL
+		n.Head = newNodeSLL
 		n.length++
 	} else {
 		temp := n.Head
-		n.Head.Next = temp
-		n.Head = &newNodeSLL
-		n.length++
+		newNodeSLL.Next = temp
+		n.Head = newNodeSLL
 	}
 }
 
-func (n *SLLList) InsertDataAfter(data int, NodeSLLBefore nodeSLL) {
+func (n *sLList) InsertDataAfter(index int, data interface{}) {
 	if n.Head == nil {
 		fmt.Println("Error, Null LinkedList")
-	}
-	//Masukkan NodeSLL yg baru
-	newNodeSLL := nodeSLL{Data: data}
-	//Bikin LinkedList
-	currentNodeSLL := n.Head
-	//Loop sampai nil
-	for currentNodeSLL != nil {
-		//Cek data yang sama
-		if NodeSLLBefore.Data == currentNodeSLL.Data {
-			//NodeSLL selanjutnya yang lama diputus terus disambung ke NodeSLL yg baru
-			newNodeSLL.Next = currentNodeSLL.Next
-			//NodeSLL lanjutan disambungkan ke NodeSLL yg baru
-			currentNodeSLL.Next = &newNodeSLL
-			//Tambah Panjang
-			n.length++
-			break
-		}
-		//ganti ganti data terus
-		currentNodeSLL = currentNodeSLL.Next
-	}
-}
-
-func (n *SLLList) InsertDataBefore(data int, NodeSLLAfter nodeSLL) {
-	if n.Head == nil {
-		fmt.Println("Error, Null LinkedList")
-	}
-	//Masukkan NodeSLL yg baru
-	newNodeSLL := nodeSLL{Data: data}
-	//Masukkan si kepala linkedlist
-	currentNodeSLL := n.Head
-	//loop smpe nil
-	for currentNodeSLL != nil {
-		// Mengecek data yang next buat dipisah
-		if currentNodeSLL.Next.Data == NodeSLLAfter.Data {
-			//NodeSLL yg diafterkan dipisah dulu
-			tempNodeSLL := currentNodeSLL.Next
-			//Tempat yg data awal, diganti sama newNodeSLL
-			currentNodeSLL.Next = &newNodeSLL
-			//NodeSLL baru yg sudah terpasang, disambunglagi sama yg dipisah tadi
-			currentNodeSLL.Next.Next = tempNodeSLL
-			n.length++
-			break
-		}
-		currentNodeSLL = currentNodeSLL.Next
-	}
-
-}
-
-func (n *SLLList) Print() {
-	if n.Head == nil {
 		return
 	}
+	newNodeSLL := &nodeSLL{Data: data}
 	currentNodeSLL := n.Head
-	for currentNodeSLL != nil {
-		fmt.Println(currentNodeSLL.Data)
-		currentNodeSLL = currentNodeSLL.Next
-	}
-	fmt.Println()
-
-}
-
-func (n *SLLList) RemoveDataByValue(data int) {
-	if n.Head == nil {
-		fmt.Println("List kosong")
-		return
-	}
-	if n.Head.Data == data {
-		n.Head = n.Head.Next
-		n.length--
-		return
-	}
-	previousNodeSLL := n.Head
-	for previousNodeSLL.Next.Data != data {
-		if previousNodeSLL.Next.Next == nil {
+	for i := 0; i < index; i++ {
+		if currentNodeSLL.Next == nil {
+			fmt.Println("Error, Index out of range")
 			return
 		}
-		previousNodeSLL = previousNodeSLL.Next
+		currentNodeSLL = currentNodeSLL.Next
 	}
-	previousNodeSLL.Next = previousNodeSLL.Next.Next
-	n.length--
+	newNodeSLL.Next = currentNodeSLL.Next
+	currentNodeSLL.Next = newNodeSLL
+	n.length++
 }
 
-func (n *SLLList) Len() int {
+func (n *sLList) InsertDataBefore(index int, data interface{}) {
+	if index == 0 {
+		fmt.Println("Error, you can't insert data before zero")
+		return
+	}
+	if n.Head == nil {
+		fmt.Println("Error, Null LinkedList")
+		return
+	}
+	newNode := &nodeSLL{Data: data}
+	currentNode := n.Head
+	for i := 0; i < index-1; i++ {
+		if currentNode.Next == nil {
+			fmt.Println("Error, index out of range")
+			return
+		}
+		currentNode = currentNode.Next
+	}
+	newNode.Next = currentNode.Next
+	currentNode.Next = newNode
+
+}
+
+//Not used because data type is interface{} so i don't give method print in this case
+// func (n *sLList) Print() {
+// 	if n.Head == nil {
+// 		return
+// 	}
+// 	currentNodeSLL := n.Head
+// 	for currentNodeSLL != nil {
+// 		fmt.Println(currentNodeSLL.Data)
+// 		currentNodeSLL = currentNodeSLL.Next
+// 	}
+// 	fmt.Println()
+// }
+
+func (n *sLList) RemoveDataByIndex(index int) interface{} {
+	if n.Head == nil {
+		fmt.Println("Empty linked list")
+		return nil
+	}
+	var temp *nodeSLL
+	currNode := n.Head
+	if index == 0 {
+		temp = n.Head
+		n.Head = nil
+		n.length--
+		return temp.Data
+	}
+	for i := 0; i < index-1; i++ {
+		if currNode.Next == nil {
+			fmt.Println("Error, index is out of range")
+			return nil
+		}
+		currNode = currNode.Next
+	}
+	temp = currNode.Next
+	currNode.Next = currNode.Next.Next
+	n.length--
+	return temp.Data
+}
+
+func (n *sLList) GetDataByIndex(index int) interface{} {
+	if n.Head == nil {
+		fmt.Println("Empty linked list")
+		return nil
+	}
+	currNode := n.Head
+	if index == 0 {
+		return currNode.Data
+	}
+	for i := 0; i < index; i++ {
+		if currNode.Next == nil {
+			fmt.Println("Error, index is out of range")
+			return nil
+		}
+		currNode = currNode.Next
+	}
+	return currNode.Data
+}
+
+func (n *sLList) Len() int {
 	return n.length
 }
 
-func (n *SLLList) Initialize() {
-	n.Head = nil
-}
-
-func (n *SLLList) IsEmpty() bool {
+func (n *sLList) IsEmpty() bool {
 	return n.Head == nil
 }
