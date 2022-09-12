@@ -49,7 +49,6 @@ func (t *Tree) PreOrder(parent *node) {
 		t.PreOrder(parent.Left)
 		t.PreOrder(parent.Right)
 	}
-
 }
 
 func (t *Tree) InOrder(parent *node) {
@@ -66,5 +65,4 @@ func (t *Tree) PostOrder(parent *node) {
 		t.PostOrder(parent.Right)
 		fmt.Print(parent.Data.(string), " ")
 	}
-
 }
